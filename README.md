@@ -3,10 +3,11 @@
 
 ## 1. OS Group 9 - Members:
 * **Trần Minh Quân** [352774521]
-* **Phạm Lê Văn Bảo** 
 * **Nguyễn Thanh Bình** 
 * **Tạ Thái Dương** 
-* **Nguyễn Văn Hào** 
+* **Phạm Nguyễn Sanh Hảo**
+* **Nguyễn Viết Thành Gia**
+* **Nguyễn Đình Minh Nhật**
 
 ## 2. Project Description:
 Xây dựng ứng dụng GUI mô phỏng các thuật toán cấp phát bộ nhớ:
