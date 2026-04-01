@@ -7,7 +7,7 @@
 * **Tạ Thái Dương** 
 * **Phạm Nguyễn Sanh Hảo**
 * **Nguyễn Viết Thành Gia**
-* **Nguyễn Đình Minh Nhật**
+* **Nguyễn Đình Minh Nhựt**
 
 ## 2. Project Description:
 Xây dựng ứng dụng GUI mô phỏng các thuật toán cấp phát bộ nhớ:
