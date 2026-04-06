@@ -34,26 +34,50 @@ def first_fit(blocks, p):
 
 def best_fit(blocks, p):
     best_idx = -1
+    # Tìm ô nhớ trống NHỎ NHẤT nhưng vẫn ĐỦ LỚN để chứa tiến trình
     for i, b in enumerate(blocks):
         if b.proc == "None" and b.size >= p.size:
             if best_idx == -1 or b.size < blocks[best_idx].size:
                 best_idx = i
+                
     if best_idx != -1:
-        blocks[best_idx].proc, blocks[best_idx].size = p.id, blocks[best_idx].size - p.size
+        b = blocks[best_idx]
+        # Tách phần bộ nhớ dư ra thành một block mới
+        if b.size > p.size:
+            leftover_size = b.size - p.size
+            new_block = Block(f"{b.id}_new", leftover_size)
+            blocks.insert(best_idx + 1, new_block)
+            
+        # Cập nhật block hiện tại cho tiến trình
+        b.size = p.size
+        b.proc = p.id
         p.allocated = True
         return True
+        
     return False
 
 def worst_fit(blocks, p):
     worst_idx = -1
+    # Tìm ô nhớ trống LỚN NHẤT để chứa tiến trình
     for i, b in enumerate(blocks):
         if b.proc == "None" and b.size >= p.size:
             if worst_idx == -1 or b.size > blocks[worst_idx].size:
                 worst_idx = i
+                
     if worst_idx != -1:
-        blocks[worst_idx].proc, blocks[worst_idx].size = p.id, blocks[worst_idx].size - p.size
+        b = blocks[worst_idx]
+        # Tách phần bộ nhớ dư ra thành một block mới
+        if b.size > p.size:
+            leftover_size = b.size - p.size
+            new_block = Block(f"{b.id}_new", leftover_size)
+            blocks.insert(worst_idx + 1, new_block)
+            
+        # Cập nhật block hiện tại cho tiến trình
+        b.size = p.size
+        b.proc = p.id
         p.allocated = True
         return True
+        
     return False
 
 # --- 3. XỬ LÝ CSV ---
