@@ -1,9 +1,6 @@
 # Project Name: Memory Management Simulation (First-Fit, Best-Fit, Worst-Fit)
 # Project Code: OS_MEM_07
 
-## Giới thiệu dự án
-Ứng dụng mô phỏng các thuật toán quản lý bộ nhớ trong Hệ điều hành, giúp trực quan hóa cách hệ thống cấp phát không gian cho các tiến trình.
-
 ## Thành viên nhóm
 1. **Trần Minh Quân** -  *Data Structures & First-Fit Algorithm*
 2. Nguyễn Thanh Bình - *Memory Visualizer*
