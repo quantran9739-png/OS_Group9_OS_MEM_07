@@ -14,6 +14,7 @@ class Process:
         self.id = id
         self.size = size
         self.allocated = False
+        self.allocated_block = "None"
 
 # --- 2. CÁC THUẬT TOÁN ---
 def first_fit(blocks, p):
@@ -29,6 +30,7 @@ def first_fit(blocks, p):
             b.size = p.size
             b.proc = p.id
             p.allocated = True
+            p.allocated_block = b.id
             return True
     return False
 
@@ -52,6 +54,7 @@ def best_fit(blocks, p):
         b.size = p.size
         b.proc = p.id
         p.allocated = True
+        p.allocated_block = b.id
         return True
         
     return False
@@ -76,6 +79,7 @@ def worst_fit(blocks, p):
         b.size = p.size
         b.proc = p.id
         p.allocated = True
+        p.allocated_block = b.id
         return True
         
     return False
@@ -100,9 +104,12 @@ def export_result(algo_name, processes):
     path = f'output/result_{algo_name.lower()}.csv'
     with open(path, 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow(['ProcessID', 'Size', 'Status'])
+        # Thêm cột Block_ID vào tiêu đề
+        writer.writerow(['ProcessID', 'Size', 'Status', 'Block_ID']) 
         for p in processes:
-            writer.writerow([p.id, p.size, "Allocated" if p.allocated else "Failed"])
+            status = "Allocated" if p.allocated else "Failed"
+            # Xuất thêm thông tin block
+            writer.writerow([p.id, p.size, status, p.allocated_block]) 
     return path
 
 # --- 4. HÀM CHẠY CHÍNH ---
@@ -131,4 +138,6 @@ def run_all():
 
 if __name__ == "__main__":
     run_all()
-    print("\n[HOÀN TẤT BƯỚC 1] - Đã có dữ liệu so sánh 3 thuật toán.")
+    print("\n[HOÀN TẤT BƯỚC 1] - Đã có dữ liệu so sánh 3 thuật toán
+
+
