@@ -17,9 +17,18 @@ class Process:
 
 # --- 2. CÁC THUẬT TOÁN ---
 def first_fit(blocks, p):
-    for b in blocks:
+    for i, b in enumerate(blocks):
         if b.proc == "None" and b.size >= p.size:
-            b.proc, b.size, p.allocated = p.id, b.size - p.size, True
+            # Tách phần bộ nhớ dư ra thành một block mới
+            if b.size > p.size:
+                leftover_size = b.size - p.size
+                new_block = Block(f"{b.id}_new", leftover_size)
+                blocks.insert(i + 1, new_block)
+            
+            # Gắn tiến trình vào block hiện tại
+            b.size = p.size
+            b.proc = p.id
+            p.allocated = True
             return True
     return False
 
