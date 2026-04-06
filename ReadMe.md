@@ -5,12 +5,12 @@
 Ứng dụng mô phỏng các thuật toán quản lý bộ nhớ trong Hệ điều hành, giúp trực quan hóa cách hệ thống cấp phát không gian cho các tiến trình.
 
 ## Thành viên nhóm
-1. **Dương Ngọc Yến (Nina)** - *Project Manager & Documentation*
-2. Thành Gia - *Memory Visualizer*
-3. Phạm Nguyễn Sanh - *Best-Fit & Worst-Fit Algorithms*
-4. Trần Minh Quân - *Data Structures & First-Fit Algorithm*
-5. Thanh Bình - *Input UI*
-6. Minh Nhựt - *Testing & Data Analysis*
+1. **Trần Minh Quân** -  *Data Structures & First-Fit Algorithm*
+2. Nguyễn Thanh Bình - *Memory Visualizer*
+3. Phạm Nguyễn Sanh Hảo - *Best-Fit & Worst-Fit Algorithms*
+4. Nguyễn Thanh Bình - *Input UI*
+5. Nguyễn Đình Minh Nhựt - *Testing & Data Analysis*
+6. Tạ Thái Dương 
 
 ## Cấu trúc thư mục
 - `/Code`: Mã nguồn ứng dụng (C#/Python/Java...)
