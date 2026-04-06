@@ -138,6 +138,6 @@ def run_all():
 
 if __name__ == "__main__":
     run_all()
-    print("\n[HOÀN TẤT BƯỚC 1] - Đã có dữ liệu so sánh 3 thuật toán
+    print("\n[HOÀN TẤT BƯỚC 1] - Đã có dữ liệu so sánh 3 thuật toán.")
 
 
