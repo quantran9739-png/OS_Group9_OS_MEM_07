@@ -115,7 +115,7 @@ class App:
         # Cập nhật bảng Treeview
         self.tree.delete(*self.tree.get_children())
         for p in processes:
-            status = "✅ Thành công" if p.allocated else "❌ Chờ / Lỗi"
+            status = "Thành công" if p.allocated else "Chờ / Lỗi"
             b_id = p.allocated_block if p.allocated else "N/A"
             self.tree.insert("", "end", values=(p.id, f"{p.size} KB", status, b_id))
             
