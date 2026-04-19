@@ -1,4 +1,4 @@
-Hướng dẫn cài đặt và khởi chạy (Installation & Setup)
+### 💻 Hướng dẫn cài đặt và khởi chạy (Installation & Setup)
 
 #### 1. Yêu cầu hệ thống
 * Hệ điều hành: Windows (Khuyến nghị).
