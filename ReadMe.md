@@ -4,10 +4,10 @@
 ## Thành viên nhóm
 1. **Trần Minh Quân** -  *Data Structures & First-Fit Algorithm*
 2. Nguyễn Thanh Bình - *Memory Visualizer & Input UI*
-3. Phạm Nguyễn Sanh Hảo - *Best-Fit & Worst-Fit Algorithms*
+3. Phạm Nguyễn Sanh Hảo - *Best-Fit Algorithms*
 5. Nguyễn Đình Minh Nhựt - *Testing & Data Analysis, ppt*
 6. Tạ Thái Dương - *Documentation*
-7. Nguyễn Viết Thành Gia - *Memory Visualizer*
+7. Nguyễn Viết Thành Gia - *Worst-Fit Algorithm*
 
 ## Cấu trúc thư mục
 - `/Code`: Mã nguồn ứng dụng (C#/Python/Java...)
