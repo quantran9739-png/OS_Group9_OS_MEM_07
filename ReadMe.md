@@ -10,7 +10,7 @@
 7. Nguyễn Viết Thành Gia - *Worst-Fit Algorithm*
 
 ## Cấu trúc thư mục
-- `/Code`: Mã nguồn ứng dụng (C#/Python/Java...)
+- `/Code`: Mã nguồn ứng dụng (Python)
 - `/DOCX`: Báo cáo chi tiết 
 - `/PPTX`: Slide thuyết trình
 - `/Extra`: Hình ảnh minh họa và kết quả kiểm thử
