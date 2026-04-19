@@ -1,8 +1,6 @@
-# guifinal.py
 import customtkinter as ctk
 import random
 import csv
-import os
 from tkinter import filedialog, messagebox
 import main_logic  # Import module thuật toán
 
@@ -32,11 +30,6 @@ class App(ctk.CTk):
         self.speed_slider = ctk.CTkSlider(self.sidebar, from_=1, to=50, command=self.update_speed)
         self.speed_slider.set(self.sim_speed)
         self.speed_slider.pack(pady=10, padx=20)
-
-        # Chế độ Stress Test
-        self.stress_mode_var = ctk.BooleanVar(value=False)
-        self.stress_mode_cb = ctk.CTkCheckBox(self.sidebar, text="⚡ Chế độ Stress Test", variable=self.stress_mode_var, text_color="#f1c40f")
-        self.stress_mode_cb.pack(pady=5, padx=20)
 
         ctk.CTkButton(self.sidebar, text="🚀 CHẠY MÔ PHỎNG", fg_color="#28a745", command=self.run_simulation).pack(pady=20, padx=20)
         ctk.CTkButton(self.sidebar, text="📊 XUẤT KẾT QUẢ CSV", fg_color="#3498db", command=self.export_csv).pack(pady=10, padx=20)
@@ -76,7 +69,7 @@ class App(ctk.CTk):
         if path:
             try:
                 self.memory_blocks = []
-                with open(path, mode='r', encoding='utf-8') as f:
+                with open(path, mode='r', encoding='utf-8-sig') as f:
                     for row in csv.DictReader(f):
                         self.memory_blocks.append({"id": row['Block'], "size": int(row['Size']), "original_size": int(row['Size']), "p": None})
                 self.draw_blocks()
@@ -87,7 +80,7 @@ class App(ctk.CTk):
         if path:
             try:
                 self.process_list = []
-                with open(path, mode='r', encoding='utf-8') as f:
+                with open(path, mode='r', encoding='utf-8-sig') as f:
                     for row in csv.DictReader(f):
                         self.process_list.append({"id": row['Process'], "size": int(row['Size'])})
             except Exception as e: messagebox.showerror("Lỗi", f"File không đúng định dạng: {e}")
@@ -131,58 +124,43 @@ class App(ctk.CTk):
         algo = self.algo_menu.get()
         stats = {"success": 0, "fail": 0, "used": 0}
         total_cap = sum(b['original_size'] for b in self.memory_blocks)
-        is_stress_test = self.stress_mode_var.get()
-
-        if is_stress_test:
-            # Nhánh 1: Chạy Stress Test (Siêu tốc)
-            for p in self.process_list:
-                target_idx = -1
-                if algo == "First-Fit": target_idx = main_logic.find_first_fit(self.memory_blocks, p['size'])
-                elif algo == "Best-Fit": target_idx = main_logic.find_best_fit(self.memory_blocks, p['size'])
-                elif algo == "Worst-Fit": target_idx = main_logic.find_worst_fit(self.memory_blocks, p['size'])
-                
-                if target_idx != -1:
-                    b = self.memory_blocks[target_idx]; b['p'] = p['id']; rem = b['size'] - p['size']
-                    stats['success'] += 1; stats['used'] += p['size']
-                    self.results.append([p['id'], p['size'], b['id'], rem, "Allocated"])
-                else:
-                    stats['fail'] += 1
-                    self.results.append([p['id'], p['size'], "N/A", 0, "Fail"])
+        
+        # CHẠY BÌNH THƯỜNG (CÓ ANIMATION)
+        def process_loop(idx):
+            if idx >= len(self.process_list):
+                pct = (stats['used'] / total_cap * 100) if total_cap > 0 else 0
+                self.stat_usage.configure(text=f"📈 Memory Usage: {pct:.1f}%")
+                return
             
-            pct = (stats['used'] / total_cap * 100) if total_cap > 0 else 0
-            self.stat_usage.configure(text=f"📈 Memory Usage: {pct:.1f}%")
-            self.stat_success.configure(text=f"✅ Allocated: {stats['success']}")
-            self.stat_fail.configure(text=f"❌ Not Allocated: {stats['fail']}")
-            messagebox.showinfo("Stress Test Hoàn Tất", f"Đã xử lý {len(self.process_list)} tiến trình!")
-        else:
-            # Nhánh 2: Chạy bình thường (Có Animation)
-            def process_loop(idx):
-                if idx >= len(self.process_list):
-                    pct = (stats['used'] / total_cap * 100) if total_cap > 0 else 0
-                    self.stat_usage.configure(text=f"📈 Memory Usage: {pct:.1f}%")
-                    return
-                p, target_idx = self.process_list[idx], -1
-                if algo == "First-Fit": target_idx = main_logic.find_first_fit(self.memory_blocks, p['size'])
-                elif algo == "Best-Fit": target_idx = main_logic.find_best_fit(self.memory_blocks, p['size'])
-                elif algo == "Worst-Fit": target_idx = main_logic.find_worst_fit(self.memory_blocks, p['size'])
-                            
-                if target_idx != -1:
-                    b = self.memory_blocks[target_idx]; b['p'] = p['id']; rem = b['size'] - p['size']
-                    stats['success'] += 1; stats['used'] += p['size']
-                    self.results.append([p['id'], p['size'], b['id'], rem, "Allocated"])
-                    self.add_table_row(p['id'], p['size'], b['id'], rem, "Allocated")
-                    self.stat_success.configure(text=f"✅ Allocated: {stats['success']}")
-                    self.animate_fill(p['id'], p['size'], target_idx, lambda: process_loop(idx + 1))
-                else:
-                    stats['fail'] += 1
-                    self.results.append([p['id'], p['size'], "N/A", 0, "Fail"])
-                    self.add_table_row(p['id'], p['size'], "N/A", 0, "Fail")
-                    self.stat_fail.configure(text=f"❌ Not Allocated: {stats['fail']}")
-                    process_loop(idx + 1)
-            process_loop(0)
+            p = self.process_list[idx]
+            target_idx = -1
+            
+            if algo == "First-Fit": target_idx = main_logic.find_first_fit(self.memory_blocks, p['size'])
+            elif algo == "Best-Fit": target_idx = main_logic.find_best_fit(self.memory_blocks, p['size'])
+            elif algo == "Worst-Fit": target_idx = main_logic.find_worst_fit(self.memory_blocks, p['size'])
+                        
+            if target_idx != -1:
+                b = self.memory_blocks[target_idx]
+                b['p'] = p['id']
+                rem = b['size'] - p['size']
+                stats['success'] += 1
+                stats['used'] += p['size']
+                
+                self.results.append([p['id'], p['size'], b['id'], rem, "Allocated"])
+                self.add_table_row(p['id'], p['size'], b['id'], rem, "Allocated")
+                self.stat_success.configure(text=f"✅ Allocated: {stats['success']}")
+                
+                self.animate_fill(p['id'], p['size'], target_idx, lambda: process_loop(idx + 1))
+            else:
+                stats['fail'] += 1
+                self.results.append([p['id'], p['size'], "N/A", 0, "Fail"])
+                self.add_table_row(p['id'], p['size'], "N/A", 0, "Fail")
+                self.stat_fail.configure(text=f"❌ Not Allocated: {stats['fail']}")
+                process_loop(idx + 1)
+                
+        process_loop(0)
 
     def add_table_row(self, p, s, b, rem, status):
-        row = ctk.CTkLabel(self.table_container, text="") # Empty wrapper
         row = ctk.CTkFrame(self.table_container, fg_color="transparent")
         row.pack(fill="x", padx=5, pady=1)
         color = "#2ecc71" if status == "Allocated" else "#e74c3c"
@@ -194,7 +172,7 @@ class App(ctk.CTk):
         path = filedialog.asksaveasfilename(defaultextension=".csv", initialfile="ket_qua_mo_phong.csv", filetypes=[("CSV Files", "*.csv")])
         if path:
             try:
-                with open(path, mode='w', newline='', encoding='utf-8') as f:
+                with open(path, mode='w', newline='', encoding='utf-8-sig') as f:
                     w = csv.writer(f)
                     w.writerow(["Process", "Size", "Block", "Remaining", "Status"])
                     w.writerows(self.results)
