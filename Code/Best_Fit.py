@@ -23,8 +23,8 @@ class App(ctk.CTk):
         ctk.CTkButton(self.sidebar, text="📥 1. Nạp Blocks CSV", command=self.load_blocks_csv).pack(pady=10, padx=20)
         ctk.CTkButton(self.sidebar, text="📂 2. Nạp Process CSV", command=self.load_procs_csv).pack(pady=10, padx=20)
         
-        # Đã thay Menu bằng Label cố định
-        ctk.CTkLabel(self.sidebar, text="THUẬT TOÁN: BEST-FIT", font=("Roboto", 14, "bold"), fg_color="#e74c3c", corner_radius=5).pack(pady=10, padx=20, fill="x", ipady=5)
+        # Nhãn thuật toán BEST-FIT (Màu Tím)
+        ctk.CTkLabel(self.sidebar, text="THUẬT TOÁN: BEST-FIT", font=("Roboto", 14, "bold"), fg_color="#9b59b6", corner_radius=5).pack(pady=10, padx=20, fill="x", ipady=5)
 
         self.speed_slider = ctk.CTkSlider(self.sidebar, from_=1, to=50, command=self.update_speed)
         self.speed_slider.set(self.sim_speed)
@@ -89,14 +89,13 @@ class App(ctk.CTk):
         if not self.memory_blocks: return
         self.update_idletasks()
         can_w, curr_x = self.mem_canvas.winfo_width() - 80, 40
-        # Logic Best-Fit
-            algo = "Best-Fit"
-            if algo == "Best-Fit":
-                min_d = float('inf')
-                for i, b in enumerate(self.memory_blocks):
-                    if b['p'] is None and b['size'] >= p['size'] and (b['size'] - p['size']) < min_d:
-                        min_d = b['size'] - p['size']
-                        target_idx = i
+        total_mem = sum(b['original_size'] for b in self.memory_blocks)
+        for b in self.memory_blocks:
+            w = (b['original_size'] / total_mem) * can_w
+            self.mem_canvas.create_rectangle(curr_x, 50, curr_x + w, 160, outline="#7f8c8d", width=2)
+            self.mem_canvas.create_text(curr_x + w/2, 175, text=f"{b['id']}\n({b['original_size']}MB)", fill="white")
+            b['coords'] = (curr_x, 50, curr_x + w, 160)
+            curr_x += w
 
     def animate_fill(self, p_name, p_size, block_idx, callback):
         block = self.memory_blocks[block_idx]
@@ -121,8 +120,7 @@ class App(ctk.CTk):
         if not self.process_list or not self.memory_blocks: return
         self.reset_simulation_data()
         
-        # KHÓA CỨNG THUẬT TOÁN FIRST-FIT Ở ĐÂY
-        algo = "First-Fit"
+        algo = "Best-Fit"
         stats = {"success": 0, "fail": 0, "used": 0}
         total_cap = sum(b['original_size'] for b in self.memory_blocks)
         
@@ -133,12 +131,13 @@ class App(ctk.CTk):
                 return
             p, target_idx = self.process_list[idx], -1
             
-            # Logic First-Fit
-            if algo == "First-Fit":
+            # Khóa cứng logic Best-Fit
+            if algo == "Best-Fit":
+                min_d = float('inf')
                 for i, b in enumerate(self.memory_blocks):
-                    if b['p'] is None and b['size'] >= p['size']: 
+                    if b['p'] is None and b['size'] >= p['size'] and (b['size'] - p['size']) < min_d:
+                        min_d = b['size'] - p['size']
                         target_idx = i
-                        break
                         
             if target_idx != -1:
                 b = self.memory_blocks[target_idx]; b['p'] = p['id']; rem = b['size'] - p['size']
@@ -164,7 +163,7 @@ class App(ctk.CTk):
 
     def export_csv(self):
         if not self.results: return
-        path = filedialog.asksaveasfilename(defaultextension=".csv", initialfile="ket_qua_mo_phong_FirstFit.csv", filetypes=[("CSV Files", "*.csv")])
+        path = filedialog.asksaveasfilename(defaultextension=".csv", initialfile="ket_qua_mo_phong_BestFit.csv", filetypes=[("CSV Files", "*.csv")])
         if path:
             try:
                 with open(path, mode='w', newline='', encoding='utf-8') as f:
