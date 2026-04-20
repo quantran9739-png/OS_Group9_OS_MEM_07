@@ -24,7 +24,6 @@
 
 #### 2. Cài đặt thư viện
 Mở Terminal/Command Prompt tại thư mục dự án và chạy lệnh:
-
 `pip install customtkinter`
 
 #### 3. Chạy chương trình (GUI)
