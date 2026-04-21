@@ -2,7 +2,7 @@
 # Project Code: OS_MEM_07
 
 ## Thành viên nhóm
-1. **Trần Minh Quân** -  *Build data structures (main_logic.py); Implement the First-Fit algorithm; Manage the GitHub repository; Support documentation writing*
+1. **Trần Minh Quân** -  *Build data structures (main_logic.py); Implement the First-Fit algorithm; Manage the GitHub repository; Support documentation, ppt*
 2. Nguyễn Thanh Bình - *Memory Visualizer & Input UI*
 3. Phạm Nguyễn Sanh Hảo - *Best-Fit Algorithms*
 5. Nguyễn Đình Minh Nhựt - *Testing & Data Analysis, ppt*
